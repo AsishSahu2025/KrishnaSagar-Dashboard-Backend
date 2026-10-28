@@ -1,0 +1,13 @@
+services:
+  krishnasagar-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: krishnasagar-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app1/logs
+    ports:
+      - "8004:8000"

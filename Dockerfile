@@ -1,50 +1,27 @@
-# Use an official Python runtime as a parent image
 FROM python:3.10-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# Set the working directory in the container
 WORKDIR /app1
 
-# Install Python and other dependencies
-RUN apt-get update && \
-    apt-get install -y \
-    python3 \
-    python3-venv \
-    python3-pip \
-    mesa-utils \
-    libasound2-dev \
-    gdal-bin \
-    libgdal-dev \
-    supervisor && \
-    ln -sf /usr/bin/python3 /usr/bin/python && \
-    ln -sf /usr/bin/pip3 /usr/bin/pip
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential gdal-bin libgdal-dev libgeos-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Create and activate a virtual environment
-RUN python3 -m venv /opt/env
-ENV PATH="/opt/env/bin:$PATH"
-
-# Copy the requirements file into the container at /app
 COPY requirements.txt /app1/
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir gunicorn whitenoise
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy your application code into the container at /app
 COPY . /app1/
 
-# Add configuration for Google Earth Engine JSON key
-COPY earth-engine-486705-90d2d5209baa.json /app1/earth-engine-486705-90d2d5209baa.json
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app1/earth-engine-486705-90d2d5209baa.json
 
-# Copy the supervisord script file
-COPY all_commands.sh /app1/all_commands.sh
-RUN chmod +x /app1/all_commands.sh
+RUN SECRET_KEY=build DB_NAME=x DB_USER=x DB_PASSWORD=x DB_HOST=x \
+    python manage.py collectstatic --noinput
 
-# Expose the port the app runs on
-EXPOSE 8003
+RUN sed -i 's/\r$//' /app1/all_commands.sh && chmod +x /app1/all_commands.sh
 
-# Run all_commands
+EXPOSE 8000
+
 CMD ["/app1/all_commands.sh"]

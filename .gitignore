@@ -11,3 +11,12 @@ venv/
 .idea/
 .DS_Store
 *.json
+earth-engine-*.json
+.env
+earth-engine-*.json
+logs/
+.env
+earth-engine-*.json
+logs/
+*.old
+env/
