@@ -60,7 +60,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-ROOT_URLCONF = 'varanga_dashboard.urls'
+ROOT_URLCONF = 'krishnasagar_dashboard.urls'
 
 TEMPLATES = [
     {
@@ -78,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'varanga_dashboard.wsgi.application'
+WSGI_APPLICATION = 'krishnasagar_dashboard.wsgi.application'
 
 
 
@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'varanga_dashboard.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'varangadb',
+        'NAME': 'krishnasagardb',
         'USER': 'bariflo',
         'PASSWORD': 'Bariflo@2401',
         'HOST': '192.168.1.199',
@@ -152,15 +152,21 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://varanga.bc-pl.com",
-    "https://varangabg.bc-pl.com",
+    # "https://varanga.bc-pl.com",
+    # "https://varangabg.bc-pl.com",
+    
 ]
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://varanga.bc-pl.com",
-    "https://varangabg.bc-pl.com",
+    # "https://varanga.bc-pl.com",
+    # "https://varangabg.bc-pl.com",
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
 ]
+
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Default primary key field type
